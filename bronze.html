@@ -290,12 +290,24 @@ const tracks = [
 
 ];
 
+
 const audioList = document.getElementById("audioList");
 const slider = document.getElementById("speedSlider");
 const speedValue = document.getElementById("speedValue");
 const resetButton = document.getElementById("resetSpeed");
 
 let currentSpeed = 1;
+
+
+function encodePath(path) {
+
+    return path
+        .split("/")
+        .map(part => encodeURIComponent(part))
+        .join("/");
+
+}
+
 
 tracks.forEach((track, index) => {
 
@@ -313,7 +325,8 @@ tracks.forEach((track, index) => {
     const audio = document.createElement("audio");
     audio.controls = true;
     audio.preload = "metadata";
-    audio.src = encodeURI(track.file);
+
+    audio.src = encodePath(track.file);
 
     if ("preservesPitch" in audio) {
         audio.preservesPitch = true;
@@ -326,9 +339,11 @@ tracks.forEach((track, index) => {
     audio.addEventListener("play", function () {
 
         document.querySelectorAll("audio").forEach(otherAudio => {
+
             if (otherAudio !== audio) {
                 otherAudio.pause();
             }
+
         });
 
         audio.playbackRate = currentSpeed;
@@ -342,6 +357,7 @@ tracks.forEach((track, index) => {
     audioList.appendChild(card);
 
 });
+
 
 function updateSpeed(percent) {
 
@@ -365,14 +381,19 @@ function updateSpeed(percent) {
 
 }
 
+
 slider.addEventListener("input", function () {
     updateSpeed(Number(slider.value));
 });
 
+
 resetButton.addEventListener("click", function () {
+
     slider.value = 100;
     updateSpeed(100);
+
 });
+
 
 updateSpeed(100);
 

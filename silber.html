@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Audios für Silber Posaune</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont,
+                         "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: #f4f4f4;
+            color: #222;
+        }
+
+        .container {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 28px 16px 50px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        h1 {
+            font-size: 30px;
+            margin: 0 0 8px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .speed-box {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            margin-bottom: 22px;
+            box-shadow: 0 3px 14px rgba(0,0,0,0.10);
+        }
+
+        .speed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .speed-label {
+            font-weight: 600;
+        }
+
+        .speed-value {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .speed-slider {
+            width: 100%;
+        }
+
+        .speed-scale {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+            margin-top: 4px;
+        }
+
+        .reset-button {
+            display: block;
+            margin: 14px auto 0;
+            padding: 9px 16px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background: #fafafa;
+            color: #333;
+            font-size: 14px;
+        }
+
+        .audio-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px;
+            margin-bottom: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+
+        .number {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .audio-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        audio {
+            width: 100%;
+        }
+
+        footer {
+            text-align: center;
+            color: #888;
+            font-size: 13px;
+            margin-top: 34px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>🎺 Audios für Silber Posaune</h1>
+        <div class="subtitle">Audioaufnahmen zum Üben</div>
+    </header>
+
+    <div class="speed-box">
+
+        <div class="speed-header">
+            <span class="speed-label">Geschwindigkeit</span>
+            <span class="speed-value" id="speedValue">100 %</span>
+        </div>
+
+        <input
+            id="speedSlider"
+            class="speed-slider"
+            type="range"
+            min="50"
+            max="150"
+            value="100"
+            step="1"
+        >
+
+        <div class="speed-scale">
+            <span>50 %</span>
+            <span>100 %</span>
+            <span>150 %</span>
+        </div>
+
+        <button id="resetSpeed" class="reset-button">
+            Zurück auf 100 %
+        </button>
+
+    </div>
+
+    <div id="audioList"></div>
+
+    <footer>
+        Audios für Silber Posaune
+    </footer>
+
+</div>
+
+<script>
+
+const tracks = [
+
+    {
+        title: "Allegro Brillante – Solo",
+        file: "silber/14 Allegro Brillante, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Allegro Brillante – Playback",
+        file: "silber/15 Allegro Brillante, Playback, Bel Canto.mp3"
+    },
+
+    {
+        title: "Legato Assai – 26",
+        file: "silber/26 Legato Assai, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Legato Assai – 27",
+        file: "silber/27 Legato Assai, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andantino Cantabile – Solo",
+        file: "silber/28 Andantino Cantabile, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andantino Cantabile – Playback",
+        file: "silber/29 Andantino Cantabile, Playback, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andante Mosso – Solo",
+        file: "silber/24 Andante Mosso, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andante Mosso – Playback",
+        file: "silber/25 Andante Mosso, Playback, Bel Canto.mp3"
+    },
+
+    {
+        title: "Note Ripetute – Solo",
+        file: "silber/34 Note Ripetute, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Note Ripetute – Playback",
+        file: "silber/35 Note Ripetute, Playback, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andantino – Solo",
+        file: "silber/36 Andantino, Solo, Bel Canto.mp3"
+    },
+
+    {
+        title: "Andantino – Playback",
+        file: "silber/37 Andantino, Playback, Bel Canto.mp3"
+    },
+
+    {
+        title: "There Is No Closer Friend – A",
+        file: "silber/02 There Is No Closer Friend (A).mp3"
+    },
+
+    {
+        title: "There Is No Closer Friend – B",
+        file: "silber/03 There Is No Closer Friend (B).mp3"
+    },
+
+    {
+        title: "Dixie Rhythm March – A",
+        file: "silber/12 Dixie-Rythm-March (A).mp3"
+    },
+
+    {
+        title: "Dixie Rhythm March – B",
+        file: "silber/13 Dixie-Rythm-March (B).mp3"
+    },
+
+    {
+        title: "Paudert Arie – Solo",
+        file: "silber/Paudert Arie, Solo.mp3"
+    },
+
+    {
+        title: "Paudert Arie – Playback",
+        file: "silber/Paudert Arie, Playback.mp3"
+    },
+
+    {
+        title: "Rhode Island Rag",
+        file: "silber/22 Rhode Island Rag, Skilful Solos.mp3"
+    },
+
+    {
+        title: "Après un Rêve – Solo",
+        file: "silber/Apres un Reve, Solo.mp3"
+    },
+
+    {
+        title: "Après un Rêve – Playback",
+        file: "silber/Apres un Reve, Playback.mp3"
+    },
+
+    {
+        title: "Bordogni 2 – Solo",
+        file: "silber/Bordogni 2, Solo.mp3"
+    },
+
+    {
+        title: "Bordogni 2 – Playback",
+        file: "silber/Bordogni 2, Playback.mp3"
+    },
+
+    {
+        title: "Bordogni 3 – Solo",
+        file: "silber/Bordogni 3, Solo.mp3"
+    },
+
+    {
+        title: "Bordogni 3 – Playback",
+        file: "silber/Bordogni 3, Playback.mp3"
+    },
+
+    {
+        title: "Bordogni 4 – Solo",
+        file: "silber/Bordogni 4, Solo.mp3"
+    },
+
+    {
+        title: "Bordogni 4 – Playback",
+        file: "silber/Bordogni 4, Playback.mp3"
+    },
+
+    {
+        title: "Bordogni 15 – Solo",
+        file: "silber/Bordogni 15, Solo.mp3"
+    },
+
+    {
+        title: "Bordogni 15 – Playback",
+        file: "silber/Bordogni 15, Playback.mp3"
+    },
+
+    {
+        title: "Bordogni 16 – Solo",
+        file: "silber/Bordogni 16, Solo.mp3"
+    },
+
+    {
+        title: "Bordogni 16 – Playback",
+        file: "silber/Bordogni 16, Playback.mp3"
+    }
+
+];
+
+
+const audioList = document.getElementById("audioList");
+const slider = document.getElementById("speedSlider");
+const speedValue = document.getElementById("speedValue");
+const resetButton = document.getElementById("resetSpeed");
+
+let currentSpeed = 1;
+
+
+function encodePath(path) {
+
+    return path
+        .split("/")
+        .map(part => encodeURIComponent(part))
+        .join("/");
+
+}
+
+
+tracks.forEach((track, index) => {
+
+    const card = document.createElement("div");
+    card.className = "audio-card";
+
+    const number = document.createElement("div");
+    number.className = "number";
+    number.textContent = "Nr. " + (index + 1);
+
+    const title = document.createElement("div");
+    title.className = "audio-title";
+    title.textContent = track.title;
+
+    const audio = document.createElement("audio");
+    audio.controls = true;
+    audio.preload = "metadata";
+    audio.src = encodePath(track.file);
+
+    if ("preservesPitch" in audio) {
+        audio.preservesPitch = true;
+    }
+
+    if ("webkitPreservesPitch" in audio) {
+        audio.webkitPreservesPitch = true;
+    }
+
+    audio.addEventListener("play", function () {
+
+        document.querySelectorAll("audio").forEach(otherAudio => {
+
+            if (otherAudio !== audio) {
+                otherAudio.pause();
+            }
+
+        });
+
+        audio.playbackRate = currentSpeed;
+
+    });
+
+    card.appendChild(number);
+    card.appendChild(title);
+    card.appendChild(audio);
+
+    audioList.appendChild(card);
+
+});
+
+
+function updateSpeed(percent) {
+
+    currentSpeed = percent / 100;
+
+    speedValue.textContent = percent + " %";
+
+    document.querySelectorAll("audio").forEach(audio => {
+
+        audio.playbackRate = currentSpeed;
+
+        if ("preservesPitch" in audio) {
+            audio.preservesPitch = true;
+        }
+
+        if ("webkitPreservesPitch" in audio) {
+            audio.webkitPreservesPitch = true;
+        }
+
+    });
+
+}
+
+
+slider.addEventListener("input", function () {
+    updateSpeed(Number(slider.value));
+});
+
+
+resetButton.addEventListener("click", function () {
+
+    slider.value = 100;
+    updateSpeed(100);
+
+});
+
+
+updateSpeed(100);
+
+</script>
+
+</body>
+</html>

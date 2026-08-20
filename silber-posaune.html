@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audios für Silber Posaune</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f4f4f4;color:#222}
+.container{max-width:760px;margin:0 auto;padding:28px 16px 50px}
+header{text-align:center;margin-bottom:24px}
+h1{font-size:30px;margin:0 0 8px}
+.subtitle{color:#666;font-size:16px}
+.speed-box{position:sticky;top:0;z-index:10;background:#fff;padding:18px;border-radius:16px;margin-bottom:22px;box-shadow:0 3px 14px rgba(0,0,0,.10)}
+.speed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.speed-label{font-weight:600}
+.speed-value{font-size:20px;font-weight:bold}
+.speed-slider{width:100%}
+.speed-scale{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-top:4px}
+.reset-button{display:block;margin:14px auto 0;padding:9px 16px;border:1px solid #ccc;border-radius:8px;background:#fafafa;color:#333;font-size:14px}
+.audio-card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.number{color:#888;font-size:13px;margin-bottom:4px}
+.audio-title{font-size:18px;font-weight:600;margin-bottom:12px}
+audio{width:100%}
+footer{text-align:center;color:#888;font-size:13px;margin-top:34px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🎺 Audios für Silber Posaune</h1>
+<div class="subtitle">Audioaufnahmen zum Üben</div>
+</header>
+
+<div class="speed-box">
+<div class="speed-header">
+<span class="speed-label">Geschwindigkeit</span>
+<span class="speed-value" id="speedValue">100 %</span>
+</div>
+
+<input id="speedSlider" class="speed-slider" type="range" min="50" max="150" value="100" step="1">
+
+<div class="speed-scale">
+<span>50 %</span>
+<span>100 %</span>
+<span>150 %</span>
+</div>
+
+<button id="resetSpeed" class="reset-button">Zurück auf 100 %</button>
+</div>
+
+<div id="audioList"></div>
+
+<footer>Audios für Silber Posaune</footer>
+</div>
+
+<script>
+const tracks = [
+["Allegro Brillante – Solo","14 Allegro Brillante, Solo, Bel Canto.mp3"],
+["Allegro Brillante – Playback","15 Allegro Brillante, Playback, Bel Canto.mp3"],
+["Legato Assai – 26","26 Legato Assai, Solo, Bel Canto.mp3"],
+["Legato Assai – 27","27 Legato Assai, Solo, Bel Canto.mp3"],
+["Andantino Cantabile – Solo","28 Andantino Cantabile, Solo, Bel Canto.mp3"],
+["Andantino Cantabile – Playback","29 Andantino Cantabile, Playback, Bel Canto.mp3"],
+["Andante Mosso – Solo","24 Andante Mosso, Solo, Bel Canto.mp3"],
+["Andante Mosso – Playback","25 Andante Mosso, Playback, Bel Canto.mp3"],
+["Note Ripetute – Solo","34 Note Ripetute, Solo, Bel Canto.mp3"],
+["Note Ripetute – Playback","35 Note Ripetute, Playback, Bel Canto.mp3"],
+["Andantino – Solo","36 Andantino, Solo, Bel Canto.mp3"],
+["Andantino – Playback","37 Andantino, Playback, Bel Canto.mp3"],
+["There Is No Closer Friend – A","02 There Is No Closer Friend (A).mp3"],
+["There Is No Closer Friend – B","03 There Is No Closer Friend (B).mp3"],
+["Dixie Rhythm March – A","12 Dixie-Rythm-March (A).mp3"],
+["Dixie Rhythm March – B","13 Dixie-Rythm-March (B).mp3"],
+["Paudert Arie – Solo","Paudert Arie, Solo.mp3"],
+["Paudert Arie – Playback","Paudert Arie, Playback.mp3"],
+["Rhode Island Rag","22 Rhode Island Rag, Skilful Solos.mp3"],
+["Après un Rêve – Solo","Apres un Reve, Solo.mp3"],
+["Après un Rêve – Playback","Apres un Reve, Playback.mp3"],
+["Bordogni 2 – Solo","Bordogni 2, Solo.mp3"],
+["Bordogni 2 – Playback","Bordogni 2, Playback.mp3"],
+["Bordogni 3 – Solo","Bordogni 3, Solo.mp3"],
+["Bordogni 3 – Playback","Bordogni 3, Playback.mp3"],
+["Bordogni 4 – Solo","Bordogni 4, Solo.mp3"],
+["Bordogni 4 – Playback","Bordogni 4, Playback.mp3"],
+["Bordogni 15 – Solo","Bordogni 15, Solo.mp3"],
+["Bordogni 15 – Playback","Bordogni 15, Playback.mp3"],
+["Bordogni 16 – Solo","Bordogni 16, Solo.mp3"],
+["Bordogni 16 – Playback","Bordogni 16, Playback.mp3"]
+];
+
+const list = document.getElementById("audioList");
+const slider = document.getElementById("speedSlider");
+const value = document.getElementById("speedValue");
+const reset = document.getElementById("resetSpeed");
+let speed = 1;
+
+function filePath(file) {
+  return "silber-posaune/" + encodeURIComponent(file);
+}
+
+tracks.forEach((track, index) => {
+  const card = document.createElement("div");
+  card.className = "audio-card";
+
+  const number = document.createElement("div");
+  number.className = "number";
+  number.textContent = "Nr. " + (index + 1);
+
+  const title = document.createElement("div");
+  title.className = "audio-title";
+  title.textContent = track[0];
+
+  const audio = document.createElement("audio");
+  audio.controls = true;
+  audio.preload = "metadata";
+  audio.src = filePath(track[1]);
+
+  if ("preservesPitch" in audio) audio.preservesPitch = true;
+  if ("webkitPreservesPitch" in audio) audio.webkitPreservesPitch = true;
+
+  audio.addEventListener("play", () => {
+    document.querySelectorAll("audio").forEach(other => {
+      if (other !== audio) other.pause();
+    });
+    audio.playbackRate = speed;
+  });
+
+  card.append(number, title, audio);
+  list.appendChild(card);
+});
+
+function setSpeed(percent) {
+  speed = percent / 100;
+  value.textContent = percent + " %";
+
+  document.querySelectorAll("audio").forEach(audio => {
+    audio.playbackRate = speed;
+    if ("preservesPitch" in audio) audio.preservesPitch = true;
+    if ("webkitPreservesPitch" in audio) audio.webkitPreservesPitch = true;
+  });
+}
+
+slider.addEventListener("input", () => setSpeed(Number(slider.value)));
+
+reset.addEventListener("click", () => {
+  slider.value = 100;
+  setSpeed(100);
+});
+
+setSpeed(100);
+</script>
+</body>
+</html>

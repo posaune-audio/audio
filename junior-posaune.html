@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Audios für Junior Posaune</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;background:#f4f4f4;color:#222}
+.container{max-width:760px;margin:0 auto;padding:28px 16px 50px}
+header{text-align:center;margin-bottom:24px}
+h1{font-size:30px;margin:0 0 8px}
+.subtitle{color:#666;font-size:16px}
+.speed-box{position:sticky;top:0;z-index:10;background:#fff;padding:18px;border-radius:16px;margin-bottom:22px;box-shadow:0 3px 14px rgba(0,0,0,.10)}
+.speed-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.speed-label{font-weight:600}
+.speed-value{font-size:20px;font-weight:bold}
+.speed-slider{width:100%}
+.speed-scale{display:flex;justify-content:space-between;font-size:12px;color:#888;margin-top:4px}
+.reset-button{display:block;margin:14px auto 0;padding:9px 16px;border:1px solid #ccc;border-radius:8px;background:#fafafa;color:#333;font-size:14px}
+.audio-card{background:#fff;border-radius:14px;padding:18px;margin-bottom:14px;box-shadow:0 2px 8px rgba(0,0,0,.07)}
+.number{color:#888;font-size:13px;margin-bottom:4px}
+.audio-title{font-size:18px;font-weight:600;margin-bottom:12px}
+audio{width:100%}
+footer{text-align:center;color:#888;font-size:13px;margin-top:34px}
+</style>
+</head>
+<body>
+<div class="container">
+<header>
+<h1>🎺 Audios für Junior Posaune</h1>
+<div class="subtitle">Audioaufnahmen zum Üben</div>
+</header>
+
+<div class="speed-box">
+<div class="speed-header">
+<span class="speed-label">Geschwindigkeit</span>
+<span class="speed-value" id="speedValue">100 %</span>
+</div>
+<input id="speedSlider" class="speed-slider" type="range" min="50" max="150" value="100" step="1">
+<div class="speed-scale"><span>50 %</span><span>100 %</span><span>150 %</span></div>
+<button id="resetSpeed" class="reset-button">Zurück auf 100 %</button>
+</div>
+
+<div id="audioList"></div>
+<footer>Audios für Junior Posaune</footer>
+</div>
+
+<script>
+const tracks = [
+["Heimweh nach Nimmerland – Solo","01 Heimweh nach Nimmerland, Solo, Concerto Primo.mp3"],
+["Heimweh nach Nimmerland – Playback","02 Heimweh nach Nimmerland, Playback, Concerto Primo.mp3"],
+["Krönungsmarsch – Solo","03 Krönungsmarsch, Solo, Concerto Primo.mp3"],
+["Krönungsmarsch – Playback","04 Krönungsmarsch, Playback, Concerto Primo.mp3"],
+["Ameisenmarsch – Solo","11 Ameisenmarsch, Solo, Concerto Primo.mp3"],
+["Ameisenmarsch – Playback","12 Ameisenmarsch, Playback, Concerto Primo.mp3"],
+["Gute Nachtlied – Solo","23 Gute Nachtlied, Solo, Concerto Primo.mp3"],
+["Gute Nachtlied – Playback","24 Gute Nachtlied, Playback, Concerto Primo.mp3"],
+["Pony And Trap","04 Pony And Trap, Skilful Solos.mp3"],
+["Summer Siesta","05 Summer Siesta, Skilful Solos.mp3"],
+["A Victorian Ballad","07 A Victorian Ballad, Skilful Solos.mp3"]
+];
+
+const list=document.getElementById("audioList");
+const slider=document.getElementById("speedSlider");
+const value=document.getElementById("speedValue");
+const reset=document.getElementById("resetSpeed");
+let speed=1;
+
+function filePath(file){return "junior-posaune/"+encodeURIComponent(file)}
+
+tracks.forEach((track,index)=>{
+  const card=document.createElement("div");
+  card.className="audio-card";
+
+  const number=document.createElement("div");
+  number.className="number";
+  number.textContent="Nr. "+(index+1);
+
+  const title=document.createElement("div");
+  title.className="audio-title";
+  title.textContent=track[0];
+
+  const audio=document.createElement("audio");
+  audio.controls=true;
+  audio.preload="metadata";
+  audio.src=filePath(track[1]);
+
+  if("preservesPitch" in audio) audio.preservesPitch=true;
+  if("webkitPreservesPitch" in audio) audio.webkitPreservesPitch=true;
+
+  audio.addEventListener("play",()=>{
+    document.querySelectorAll("audio").forEach(other=>{
+      if(other!==audio) other.pause();
+    });
+    audio.playbackRate=speed;
+  });
+
+  card.append(number,title,audio);
+  list.appendChild(card);
+});
+
+function setSpeed(percent){
+  speed=percent/100;
+  value.textContent=percent+" %";
+  document.querySelectorAll("audio").forEach(audio=>{
+    audio.playbackRate=speed;
+    if("preservesPitch" in audio) audio.preservesPitch=true;
+    if("webkitPreservesPitch" in audio) audio.webkitPreservesPitch=true;
+  });
+}
+
+slider.addEventListener("input",()=>setSpeed(Number(slider.value)));
+reset.addEventListener("click",()=>{slider.value=100;setSpeed(100)});
+setSpeed(100);
+</script>
+</body>
+</html>
